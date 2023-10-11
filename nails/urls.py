@@ -19,7 +19,7 @@ from django.urls import path, include, re_path
 from nails import settings
 from django.conf.urls.static import static
 from django.views.static import serve as mediaserve
-from main.views import pageNotFound
+from main.endpoints.views import pageNotFound
 
 urlpatterns = [
     path('admin/', admin.site.urls),
