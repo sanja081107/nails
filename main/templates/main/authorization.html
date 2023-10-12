@@ -4,11 +4,36 @@
 
 {% block body %}
 
+<style>
+    .login-form {
+        padding: 10px;
+    }
+    .border-form {
+        padding: 10px;
+        border-radius: 12px; /* Радиус скругления */
+        border: 2px solid grey; /* Параметры рамки */
+        box-shadow: 0 0 5px #666; /* Параметры тени */
+    }
+</style>
+
     <div class="row">
         <div class="col-sm"></div>
-        <div class="col-sm">
-            <br><br>
-            <h3 style="text-align: center;">Введите свои данные</h3>
+        <div class="col-sm login-form">
+            <div class="border-form">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for el in form %}
+                    <p><label for="{{el.id_for_label}}">{{ el.label }}:</label> {{ el }}</p>
+                    <div class="form-error"> {{ el.errors }}</div>   <!-- Выдается ошибка по отдельному полю формы -->
+                    {% endfor %}
+                    {{ form.non_field_errors }}
+                    <button class="btn btn-success" type="submit">Войти</button>
+                </form><br>
+            </div>
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'home' %}">Не зарегистрированы?</a><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'home' %}">Забыли пароль?</a><br><br>
+            <br>
         </div>
         <div class="col-sm"></div>
     </div>
