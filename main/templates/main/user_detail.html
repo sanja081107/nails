@@ -60,24 +60,17 @@
             {% endif %}
         </div>
         <div class="col-sm col-detail border-bottom border-top border-left border-right">
-            {% if el.first_name %}
-                <p><h4>Имя:</h4> {{ el.first_name }}</p>
-            {% else %}
-                <p><h4>Имя:</h4> Не заполнено</p>
-            {% endif %}
-
-
-            {% if el.last_name %}
-                <p><h4>Фамилия:</h4> {{ el.last_name }}</p>
-            {% else %}
-                <p><h4>Фамилия:</h4> Не заполнено</p>
-            {% endif %}
-
-
             {% if el.email %}
-                <p><h4>Почта:</h4> {{ el.email }}</p>
+                <p><h4>Имя пользователя:</h4> {{ el.email }}</p>
             {% else %}
-                <p><h4>Почта:</h4> Не заполнено</p>
+                <p><h4>Имя пользователя:</h4> Не заполнено</p>
+            {% endif %}
+
+
+            {% if el.instagram %}
+                <p><h4>Инстаграм:</h4> {{ el.instagram }}</p>
+            {% else %}
+                <p><h4>Инстаграм:</h4> Не заполнено</p>
             {% endif %}
 
 
@@ -85,13 +78,6 @@
                 <p><h4>Телефон:</h4> {{ el.mobile }}</p>
             {% else %}
                 <p><h4>Телефон:</h4> Не заполнено</p>
-            {% endif %}
-
-
-            {% if el.address %}
-                <p><h4>Адрес:</h4> {{ el.address }}</p>
-            {% else %}
-                <p><h4>Адрес:</h4> Не заполнено</p>
             {% endif %}
         </div>
         <div class="col-sm col-detail border-bottom border-top border-left border-right">
@@ -104,7 +90,7 @@
             {% endif %}
 
             {% if request.user == el %}
-                <p><a class="btn mb-2 btn-outline-primary" href="{% url 'home' %}">Изменить пароль</a></p>
+                <p><a class="btn mb-2 btn-outline-primary" href="{% url 'password_change' %}">Изменить пароль</a></p>
             {% endif %}
 
             {% if request.user == el %}

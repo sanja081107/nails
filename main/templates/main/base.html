@@ -82,7 +82,7 @@
                     <li style="border-bottom: solid; width: 100%; align: center;"></li>
                     <br>
                     {% if not request.user.is_authenticated %}
-                        <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'authorization' %}" style="padding: 10px 20px;">Авторизация</a></li>
+                        <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'user_login' %}" style="padding: 10px 20px;">Авторизация</a></li>
                     {% else %}
                         <li class="u-nav-item"><a class="u-button-style u-nav-link" href="{% url 'user_detail' request.user.slug %}" style="padding: 10px 20px;">{{ request.user.email|slice_email:"@" }}</a></li>
                     {% endif %}
