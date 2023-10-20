@@ -12,7 +12,7 @@ def upload_photo_autor(instance, filename):
 
 
 class CustomUser(AbstractUser):
-    username = None
+
     email = models.EmailField(_("email address"), unique=True)
 
     slug = models.SlugField(verbose_name='Ваш ID', unique=True, db_index=True, null=True)
@@ -28,6 +28,7 @@ class CustomUser(AbstractUser):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.email)
+        self.username = self.email
         return super(CustomUser, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
