@@ -1,6 +1,7 @@
+from allauth.account.views import LoginView
 from django.contrib.auth import logout, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView
+# from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, CreateView, TemplateView
@@ -15,8 +16,8 @@ def user_logout(request):
 
 
 class UserLogin(LoginView):
-    form_class = LoginUserForm
-    template_name = 'main/user_login.html'
+    # form_class = LoginUserForm
+    # template_name = 'main/user_login.html'
 
     def get_success_url(self):
         return reverse_lazy('home')

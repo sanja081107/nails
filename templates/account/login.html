@@ -1,0 +1,70 @@
+{% extends "main/base.html" %}
+{% load i18n %}
+{% load account socialaccount %}
+
+
+{% block body %}
+
+{% get_providers as socialaccount_providers %}
+
+{% if socialaccount_providers %}
+
+<style>
+    .login-form {
+        padding: 10px;
+    }
+    .border-form {
+        padding: 10px;
+        border-radius: 12px; /* Радиус скругления */
+        border: 2px solid grey; /* Параметры рамки */
+        box-shadow: 0 0 5px #666; /* Параметры тени */
+    }
+</style>
+
+    <div class="row">
+        <div class="col-sm"></div>
+        <div class="col-sm login-form">
+            <div class="border-form">
+                <div class="socialaccount_ballot">
+
+                    <ul class="socialaccount_providers">
+                        {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+                    </ul>
+
+                    <div class="login-or">{% trans 'or' %}</div>
+
+                </div>
+
+                {% include "socialaccount/snippets/login_extra.html" %}
+
+                {% else %}
+                    <p>{% blocktrans %}If you have not created an account yet, then please
+                    <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+                {% endif %}
+
+                <form class="login" method="POST" action="{% url 'account_login' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                    {% endif %}
+                    <button class="primaryAction btn btn-success" type="submit">{% trans "Sign In" %}</button>
+                </form>
+            <br>
+            </div>
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'user_register' %}">Не зарегистрированы?</a><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'password_reset' %}">Забыли пароль?</a><br><br>
+            <br>
+        </div>
+        <div class="col-sm"></div>
+    </div>
+
+    <script>
+        var login = document.querySelector("#id_login");
+        login.className = "form-control";
+        var password = document.querySelector("#id_password");
+        password.className = "form-control";
+    </script>
+
+{% endblock %}

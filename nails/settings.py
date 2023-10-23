@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'main.apps.MainConfig',
+    'debug_toolbar',
     'widget_tweaks',
 
     'allauth',
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'allauth.account.middleware.AccountMiddleware',
 ]
 
@@ -183,3 +185,7 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
+
+
+# для работы debug toolbar
+INTERNAL_IPS = ['127.0.0.1', '*']
