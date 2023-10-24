@@ -1,0 +1,52 @@
+{% extends "main/base.html" %}
+
+{% load i18n %}
+
+
+{% block body %}
+
+    <div class="row">
+      <div class="col-sm"></div>
+      <div class="col-sm">
+
+          <h1>{% trans "Sign Up" %}</h1>
+
+          <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+
+          <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+            {% endif %}
+            <button type="submit">{% trans "Sign Up" %} &raquo;</button>
+          </form>
+        <br>
+
+      </div>
+      <div class="col-sm"></div>
+    </div>
+
+    <script>
+
+        var username = document.querySelector("#id_username");
+        username.className = "form-control";
+        username.value = 'hello';
+        username.hidden = true;
+
+        var email = document.querySelector("#id_email");
+        email.className = "form-control";
+
+        var password1 = document.querySelector("#id_password1");
+        password1.className = "form-control";
+
+        var password2 = document.querySelector("#id_password2");
+        password2.className = "form-control";
+
+        setTimeout(function(){
+           $("label[for='id_username']").css('display', 'none');
+        }, 0)
+
+    </script>
+
+{% endblock %}

@@ -1,3 +1,4 @@
+from allauth.account.forms import SignupForm
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
 from django import forms
 from django.forms import ModelForm
@@ -9,7 +10,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ("email",)
+        fields = ("email", "password1", "password2")
 
 
 class CustomUserChangeForm(UserChangeForm):
