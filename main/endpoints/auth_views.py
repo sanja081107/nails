@@ -3,7 +3,7 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, UpdateView, CreateView
+from django.views.generic import DetailView, UpdateView
 
 from main.forms import *
 from main.models import *
@@ -17,14 +17,13 @@ def user_logout(request):
 class UserLogin(LoginView):
 
     def get_context_data(self, **kwargs):
-        ret = super(UserLogin, self).get_context_data(**kwargs)
-        ret.update(
-            {
-                'title': 'Авторизация',
-                'body_title': 'Авторизация',
-            }
-        )
-        return ret
+        cont = super(UserLogin, self).get_context_data(**kwargs)
+        ret = {
+            'title': 'Авторизация',
+            'body_title': 'Авторизация',
+        }
+        context = dict(list(cont.items()) + list(ret.items()))
+        return context
 
 
 class UserRegister(SignupView):

@@ -9,8 +9,6 @@
       <div class="col-sm"></div>
       <div class="col-sm">
 
-          <h1>{% trans "Sign Up" %}</h1>
-
           <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
 
           <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
@@ -19,7 +17,8 @@
             {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
             {% endif %}
-            <button type="submit">{% trans "Sign Up" %} &raquo;</button>
+            <button class="btn btn-success" type="submit">{% trans "Sign Up" %} &raquo;</button>
+              <br><br>
           </form>
         <br>
 
@@ -31,7 +30,7 @@
 
         var username = document.querySelector("#id_username");
         username.className = "form-control";
-        username.value = 'hello';
+        username.value = '_';
         username.hidden = true;
 
         var email = document.querySelector("#id_email");
