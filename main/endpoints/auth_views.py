@@ -39,7 +39,7 @@ class UserRegister(SignupView):
         return ret
 
 
-class UserDetailView(LoginRequiredMixin, DetailView, UpdateView):
+class UserDetailView(DetailView, UpdateView):
     model = CustomUser
     slug_url_kwarg = 'slug'
     template_name = 'main/user_detail.html'
@@ -47,7 +47,7 @@ class UserDetailView(LoginRequiredMixin, DetailView, UpdateView):
 
     form_class = CustomUserChangePhotoForm
 
-    login_url = reverse_lazy('authorization')
+    login_url = reverse_lazy('user_login')
 
     def get_success_url(self):
         user = CustomUser.objects.get(slug=self.kwargs['slug'])
@@ -58,3 +58,24 @@ class UserDetailView(LoginRequiredMixin, DetailView, UpdateView):
         context['title'] = 'Данные пользователя'
         context['body_title'] = 'Данные пользователя'
         return context
+
+
+class UserUpdateView(LoginRequiredMixin, UpdateView):
+    model = CustomUser
+    slug_url_kwarg = 'slug'
+    template_name = 'main/user_update.html'
+    form_class = CustomUserChangeForm
+
+    def get_success_url(self):
+        user = CustomUser.objects.get(slug=self.kwargs['slug'])
+        return user.get_absolute_url()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Изменение данных'
+        context['body_title'] = 'Изменение данных'
+        if self.request.user.slug == self.kwargs['slug']:
+            return context
+        else:
+            context['error'] = 'Ошибка доступа'
+            return context

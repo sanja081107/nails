@@ -2,14 +2,13 @@
 
 {% load i18n %}
 
-
 {% block body %}
 
     <div class="row">
       <div class="col-sm"></div>
       <div class="col-sm">
 
-          <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+          <p>{% block trans %}Уже есть аккаунт? Тогда пожалуйста <a href="{% url 'user_login' %}">войдите</a>.{% endblock %}</p>
 
           <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
             {% csrf_token %}

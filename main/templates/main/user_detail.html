@@ -86,7 +86,7 @@
             {% endif %}
 
             {% if request.user == el %}
-                <p><a class="btn mb-2 btn-outline-primary" href="{% url 'home' %}">Изменить данные</a></p>
+                <p><a class="btn mb-2 btn-outline-primary" href="{% url 'user_update' el.slug %}">Изменить данные</a></p>
             {% endif %}
 
             {% if request.user == el %}

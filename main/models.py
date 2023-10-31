@@ -18,7 +18,7 @@ class CustomUser(AbstractUser):
     slug = models.SlugField(verbose_name='Ваш ID', unique=True, db_index=True, null=True)
     photo = models.ImageField(upload_to=upload_photo_autor, verbose_name='Фото', null=True, blank=True)
     instagram = models.CharField(max_length=50, verbose_name='Инстаграм', null=True, blank=True)
-    mobile = models.CharField(max_length=13, verbose_name='Телефон', null=True, blank=True)
+    mobile = models.CharField(max_length=20, verbose_name='Телефон', null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True, verbose_name='Зарегистрирован')
 
     USERNAME_FIELD = "email"

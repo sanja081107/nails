@@ -7,7 +7,7 @@ class PasswordChange(PasswordChangeView):
         context = super().get_context_data()
         c_def = {
             'title': 'Изменение пароля',
-            'block_title': 'Изменение пароля',
+            'body_title': 'Изменение пароля',
         }
         context = dict(list(context.items()) + list(c_def.items()))
         return context
@@ -18,7 +18,7 @@ class PasswordChangeDone(PasswordChangeDoneView):
         context = super().get_context_data()
         c_def = {
             'title': 'Пароль изменен успешно',
-            'block_title': 'Пароль изменен успешно',
+            'body_title': 'Пароль изменен успешно',
         }
         context = dict(list(context.items()) + list(c_def.items()))
         return context
@@ -29,7 +29,7 @@ class PasswordReset(PasswordResetView):
         context = super().get_context_data()
         c_def = {
             'title': 'Восстановление пароля',
-            'block_title': 'Восстановление пароля',
+            'body_title': 'Восстановление пароля',
         }
         context = dict(list(context.items()) + list(c_def.items()))
         return context
@@ -40,7 +40,7 @@ class PasswordResetDone(PasswordResetDoneView):
         context = super().get_context_data()
         c_def = {
             'title': 'Восстановление пароля',
-            'block_title': 'Восстановление пароля',
+            'body_title': 'Восстановление пароля',
         }
         context = dict(list(context.items()) + list(c_def.items()))
         return context
@@ -51,7 +51,7 @@ class PasswordResetConfirm(PasswordResetConfirmView):
         context = super().get_context_data()
         c_def = {
             'title': 'Сброс пароля',
-            'block_title': 'Сброс пароля',
+            'body_title': 'Сброс пароля',
         }
         context = dict(list(context.items()) + list(c_def.items()))
         return context
@@ -62,7 +62,7 @@ class PasswordResetComplete(PasswordResetCompleteView):
         context = super().get_context_data()
         c_def = {
             'title': 'Сброс пароля выполнен',
-            'block_title': 'Сброс пароля выполнен',
+            'body_title': 'Сброс пароля выполнен',
         }
         context = dict(list(context.items()) + list(c_def.items()))
         return context

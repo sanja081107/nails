@@ -18,5 +18,6 @@ urlpatterns = [
     path('account/login/', UserLogin.as_view(), name='user_login'),
     path('account/signup/', UserRegister.as_view(), name='user_register'),
     path('user_detail/<slug:slug>/', UserDetailView.as_view(), name='user_detail'),
+    path('user_update/<slug:slug>/', UserUpdateView.as_view(), name='user_update'),
     path('user_logout/', user_logout, name='user_logout'),
 ]
