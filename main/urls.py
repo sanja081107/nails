@@ -4,9 +4,10 @@ from main.endpoints.auth_views import *
 from main.endpoints.pass_views import *
 
 urlpatterns = [
-    path('', home, name='home'),
-    path('about/', about, name='about'),
-    path('contacts/', contacts, name='contacts'),
+    path('', HomeView.as_view(), name='home'),
+    path('manicure/', ManicureView.as_view(), name='manicure'),
+    path('contacts/', ContactsView.as_view(), name='contacts'),
+    path('about/', AboutView.as_view(), name='about'),
 
     path('password_change/', PasswordChange.as_view(), name='password_change'),
     path('password_change_done/', PasswordChangeDone.as_view(), name='password_change_done'),
