@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django_celery_results',
+    'django_celery_beat',
 
     'main.apps.MainConfig',
     'debug_toolbar',
@@ -189,3 +191,12 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 # для работы debug toolbar
 INTERNAL_IPS = ['127.0.0.1', '*']
+
+
+# для работы celery
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Minsk'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
