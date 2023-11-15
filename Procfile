@@ -1,0 +1,1 @@
+web gunicorn nails.wsgi:application --log-file -

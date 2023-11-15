@@ -18,16 +18,16 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         context['title'] = 'Главная'
-        if self.request.user.is_authenticated:
-            try:
-                post = EmailAddress.objects.get(email=self.request.user.email)
-                if post and post.verified:
-                    print(post.verified)
-                else:
-                    logout(self.request)
-                    print('verify email')
-            except:
-                return context
+        # if self.request.user.is_authenticated:
+        #     try:
+        #         post = EmailAddress.objects.get(email=self.request.user.email)
+        #         if post and post.verified:
+        #             context['verify'] = 'verified'
+        #         else:
+        #             logout(self.request)
+        #             context['verify'] = 'not verified'
+        #     except:
+        #         return context
         return context
 
 class ManicureView(TemplateView):

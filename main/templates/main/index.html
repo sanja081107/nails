@@ -3,6 +3,12 @@
 
 {% block body %}
 
+  {% if verify == 'not verified' %}
+    <script>
+      alert("На вашу почту отправлено письмо для подтверждения аккаунта");
+    </script>
+  {% endif %}
+
     <section class="u-clearfix u-image u-section-1" id="carousel_f8c2">
       <div class="u-clearfix u-sheet u-sheet-1">
         <div class="u-container-style u-group u-white u-group-1">
