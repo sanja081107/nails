@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User, AbstractUser
+from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from slugify import slugify
@@ -36,3 +37,45 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class Manicure(models.Model):
+    title = models.CharField(max_length=15, verbose_name='Название', blank=True, null=True)
+    time = models.CharField(max_length=5, verbose_name='Время', validators=[RegexValidator(regex=r'(^(([0,1][0-9])|(2[0-2])):[0-9][0-9]$)', message='Неверный формат времени!')])
+    client = models.ForeignKey('CustomUser', on_delete=models.SET_DEFAULT, verbose_name='Клиент', default=None, blank=True, null=True)
+    service = models.ForeignKey('Service', on_delete=models.DO_NOTHING, verbose_name='Доступные услуги', default=None, blank=True, null=True)
+    date = models.DateField(verbose_name='Дата', default=None)
+    is_active = models.BooleanField(verbose_name='Опубликовать', default=True)
+
+    def save(self, *args, **kwargs):
+        day = str(self.date)
+        day = day.split('-')
+        time_out = str(self.time)
+        time_out = time_out.split(':')
+        self.title = day[2] + '. ' + str(self.time) + '-' + str(int(time_out[0])+2) + ':' + time_out[1]
+        return super(Manicure, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Запись'
+        verbose_name_plural = 'Записи на ногти'
+        ordering = ['-date', 'title']
+
+
+class Service(models.Model):
+    title = models.CharField(max_length=255, verbose_name='Название', validators=[RegexValidator(regex=r'$', message='Неверный формат поля!')])
+    price = models.IntegerField(default=0, verbose_name='Цена в рублях')
+
+    def save(self, *args, **kwargs):
+        self.title = str(self.title) + ' = ' + str(self.price) + 'руб.'
+        return super(Service, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Услуга'
+        verbose_name_plural = 'Мои услуги'
+        ordering = ['id']
