@@ -1,3 +1,5 @@
+import datetime
+
 from allauth.account.models import EmailAddress
 from django.contrib.auth import logout
 from django.http import HttpResponseNotFound, HttpResponse
@@ -35,8 +37,16 @@ class ManicureView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(ManicureView, self).get_context_data(**kwargs)
+        today = datetime.date.today()
+        yesterday = today - datetime.timedelta(days=1)
+        posts = Manicure.objects.filter(date__gt=yesterday, client=None, is_active=True)
+        dates = []
+        for el in posts:
+            dates.append(str(el.date))
         context['title'] = 'Запись на маникюр'
         context['body_title'] = 'Запись на маникюр'
+        context['today'] = today
+        context['dates'] = dates
         return context
 
 

@@ -35,8 +35,13 @@ class CustomUserAdmin(UserAdmin):
     get_html_photo.short_description = 'Миниатюра'
 
 
+class ManicureAdmin(admin.ModelAdmin):
+    list_display = ('title', 'client', 'date')
+    list_editable = ('client',)
+
+
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Manicure)
+admin.site.register(Manicure, ManicureAdmin)
 admin.site.register(Service)
 
 
