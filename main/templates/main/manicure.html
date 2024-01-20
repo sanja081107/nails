@@ -38,14 +38,22 @@
 
             <h4>Выберите свободную дату</h4><br>
 
-            <div id="datepicker" style="margin: 0 22%"></div>
-            <input type="hidden" id="datepicker_value">
 
-            <div style="text-align: left; margin: 10% 15%;">
-                {% for el in posts %}
-                    {{ el }}, client - {{ el.client }}<br>
-                {% endfor %}
+            <div id="datepicker" style="margin: 0 22%"></div>
+
+            <input
+                hidden
+                hx-get="{% url 'search_times' %}"
+                hx-trigger="click delay:0.3s"
+                hx-target="#times-result"
+                id="datepicker_value"
+                name="datepicker_value"
+                value=""><br><br>
+
+            <div id="times-result">
+                {% include 'main/times_result.html' %}
             </div>
+
 
             <script>
                 var dates = [{% for el in dates %}'{{ el }}',{% endfor %}];
@@ -62,10 +70,12 @@
 
                 document.querySelector('#datepicker').onchange = function() {
                     var date = document.querySelector("#datepicker");
-                    console.log(date.value);
+                    var date_value = document.querySelector("#datepicker_value");
+                    date_value.value = date.value;
+                    if (date_value.value != 'none') {
+                        date_value.click();
+                    };
                 };
-
-
             </script>
 
         </div>

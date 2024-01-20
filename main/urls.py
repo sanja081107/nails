@@ -9,6 +9,8 @@ urlpatterns = [
     path('contacts/', ContactsView.as_view(), name='contacts'),
     path('about/', AboutView.as_view(), name='about'),
 
+    path('search_times/', search_times, name='search_times'),
+
     path('password_change/', PasswordChange.as_view(), name='password_change'),
     path('password_change_done/', PasswordChangeDone.as_view(), name='password_change_done'),
     path('password_reset/', PasswordReset.as_view(), name='password_reset'),

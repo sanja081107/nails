@@ -37,17 +37,31 @@ class ManicureView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(ManicureView, self).get_context_data(**kwargs)
+
         today = datetime.date.today()
         yesterday = today - datetime.timedelta(days=1)
         posts = Manicure.objects.filter(date__gt=yesterday, client=None, is_active=True)
+
         dates = []
         for el in posts:
             dates.append(str(el.date))
+        dates.append(str(today))
+
         context['title'] = 'Запись на маникюр'
         context['body_title'] = 'Запись на маникюр'
         context['today'] = today
         context['dates'] = dates
         return context
+
+
+def search_times(request):
+    if request.method == 'GET':
+        date = request.GET.get('datepicker_value')
+    if not date:
+        date = datetime.date.today()
+    times = Manicure.objects.filter(date=date, client=None, is_active=True)
+    context = {'times': times}
+    return render(request, 'main/times_result.html', context)
 
 
 class AboutView(TemplateView):

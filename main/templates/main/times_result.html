@@ -1,0 +1,9 @@
+{% if times %}
+    <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+        <ol>
+            {% for el in times %}
+                <li><strong>{{ el.title }}</strong> записаться</li>
+            {% endfor %}
+        </ol>
+    </div>
+{% endif %}
