@@ -2,7 +2,7 @@
     <div class="alert alert-secondary alert-dismissible fade show" role="alert">
         <ol>
             {% for el in times %}
-                <li><strong>{{ el.title }}</strong> записаться</li>
+                <li style="margin: 10px 0;"><strong>{{ el.title }}</strong> <a class="btn btn-success" href="{% url 'select_service' el.pk %}">записаться</a></li>
             {% endfor %}
         </ol>
     </div>

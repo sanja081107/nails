@@ -10,6 +10,7 @@ urlpatterns = [
     path('about/', AboutView.as_view(), name='about'),
 
     path('search_times/', search_times, name='search_times'),
+    path('select_service/<int:pk>/', SelectServiceView.as_view(), name='select_service'),
 
     path('password_change/', PasswordChange.as_view(), name='password_change'),
     path('password_change_done/', PasswordChangeDone.as_view(), name='password_change_done'),

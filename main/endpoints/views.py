@@ -2,6 +2,7 @@ import datetime
 
 from allauth.account.models import EmailAddress
 from django.contrib.auth import logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseNotFound, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -62,6 +63,16 @@ def search_times(request):
     times = Manicure.objects.filter(date=date, client=None, is_active=True)
     context = {'times': times}
     return render(request, 'main/times_result.html', context)
+
+
+class SelectServiceView(LoginRequiredMixin, TemplateView):
+    template_name = 'main/select_service.html'
+    login_url = reverse_lazy('user_login')
+
+    def get_context_data(self, **kwargs):
+        context = super(SelectServiceView, self).get_context_data(**kwargs)
+        context['time'] = self.kwargs['pk']
+        return context
 
 
 class AboutView(TemplateView):
