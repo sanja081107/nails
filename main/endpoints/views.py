@@ -21,16 +21,6 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         context['title'] = 'Главная'
-        # if self.request.user.is_authenticated:
-        #     try:
-        #         post = EmailAddress.objects.get(email=self.request.user.email)
-        #         if post and post.verified:
-        #             context['verify'] = 'verified'
-        #         else:
-        #             logout(self.request)
-        #             context['verify'] = 'not verified'
-        #     except:
-        #         return context
         return context
 
 class ManicureView(TemplateView):
@@ -38,30 +28,53 @@ class ManicureView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(ManicureView, self).get_context_data(**kwargs)
-
         today = datetime.date.today()
-        yesterday = today - datetime.timedelta(days=1)
-        posts = Manicure.objects.filter(date__gt=yesterday, client=None, is_active=True)
 
-        dates = []
-        for el in posts:
-            dates.append(str(el.date))
-        dates.append(str(today))
+        if not self.request.user.is_authenticated:
+            yesterday = today - datetime.timedelta(days=1)
+            posts = Manicure.objects.filter(date__gt=yesterday, client=None, is_active=True)
+
+            dates = []
+            for el in posts:
+                dates.append(str(el.date))
+            dates.append(str(today))
+        else:
+            n = 1                                                                                       # сколько дней за и после неактивны со дня записи
+            yesterday = today - datetime.timedelta(days=1)
+            all_dates = Manicure.objects.filter(date__gt=yesterday, client=None, is_active=True)        # поиск всех свободных дней
+            busy_dates = Manicure.objects.filter(date__gt=yesterday, client=self.request.user)          # поиск всех предстоящих записей для пользователя
+
+            all_dates_list = []
+            for el in all_dates:
+                all_dates_list.append(str(el.date))
+            all_dates_list.append(str(today))
+
+            busy_dates_list = []
+            if busy_dates:
+                for el in busy_dates:
+                    for i in range(n+1):
+                        busy_dates_list.append(str(el.date - datetime.timedelta(days=i)))
+                        busy_dates_list.append(str(el.date + datetime.timedelta(days=i)))
+            dates = set(all_dates_list) - set(busy_dates_list)
+            dates = list(dates)
 
         context['title'] = 'Запись на маникюр'
         context['body_title'] = 'Запись на маникюр'
-        context['today'] = today
         context['dates'] = dates
         return context
 
 
 def search_times(request):
     if request.method == 'GET':
-        date = request.GET.get('datepicker_value')
+        date_str = request.GET.get('datepicker_value')
+        date = datetime.datetime.strptime(date_str, '%Y-%m-%d')
     if not date:
         date = datetime.date.today()
     times = Manicure.objects.filter(date=date, client=None, is_active=True)
-    context = {'times': times}
+    context = {
+        'times': times,
+        'date': date,
+    }
     return render(request, 'main/times_result.html', context)
 
 

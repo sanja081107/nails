@@ -1,9 +1,51 @@
-{% if times %}
-    <div class="alert alert-secondary alert-dismissible fade show" role="alert">
-        <ol>
-            {% for el in times %}
-                <li style="margin: 10px 0;"><strong>{{ el.title }}</strong> <a class="btn btn-success" href="{% url 'select_service' el.pk %}">записаться</a></li>
-            {% endfor %}
-        </ol>
+{% if date %}
+
+    {% if times %}
+
+        <div class="row">
+            <div class="col-sm"></div>
+            <div class="col-sm">
+
+                <div class="alert alert-secondary" role="alert">
+                    <ol>
+                        {% for el in times %}
+                            <li style="margin: 10px 0;"><strong>{{ el.title }}</strong>&nbsp;&nbsp;<a class="btn btn-primary btn-sm" href="{% url 'select_service' el.pk %}">записаться</a></li>
+                        {% endfor %}
+                    </ol>
+                </div>
+
+            </div>
+            <div class="col-sm"></div>
+        </div>
+
+    {% else %}
+
+        <div class="row">
+            <div class="col-sm"></div>
+            <div class="col-sm">
+
+                <div class="alert alert-secondary" role="alert">
+                    <p style="margin: 10px 0;"><strong>На {{ date|date:"d.m.y" }} нет записей</strong></p>
+                </div>
+
+            </div>
+            <div class="col-sm"></div>
+        </div>
+
+    {% endif %}
+
+{% else %}
+
+    <div class="row">
+        <div class="col-sm"></div>
+        <div class="col-sm">
+
+            <div class="alert alert-secondary" role="alert">
+                <p style="margin: 10px 0;"><strong>Выберите доступный день!!!</strong></p>
+            </div>
+
+        </div>
+        <div class="col-sm"></div>
     </div>
+
 {% endif %}
