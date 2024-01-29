@@ -41,7 +41,7 @@
 
         <input
             hidden
-            hx-get="{% url 'search_times' %}"
+            hx-get="{% url 'times_result' %}"
             hx-trigger="click delay:0.3s"
             hx-target="#times-result"
             id="datepicker_value"
@@ -65,6 +65,7 @@
                     }
                 });
             });
+
 
             document.querySelector('#datepicker').onchange = function() {
                 var date = document.querySelector("#datepicker");

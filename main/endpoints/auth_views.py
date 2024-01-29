@@ -1,9 +1,11 @@
+import datetime
+
 from allauth.account.views import LoginView, SignupView
 from django.contrib.auth import logout, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import DetailView, UpdateView, TemplateView
 
 from main.forms import *
 from main.models import *
@@ -58,6 +60,25 @@ class UserDetailView(DetailView, UpdateView):
         context['title'] = 'Данные пользователя'
         context['body_title'] = 'Данные пользователя'
         return context
+
+
+class UserHistoryView(LoginRequiredMixin, TemplateView):
+    template_name = 'main/user_history.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        today = datetime.date.today()
+        yesterday = today - datetime.timedelta(days=1)
+
+        context['title'] = 'История пользователя'
+        context['body_title'] = 'История пользователя'
+        context['posts'] = Manicure.objects.filter(date__gt=yesterday, client=self.request.user)
+
+        if self.request.user.slug == self.kwargs['slug']:
+            return context
+        else:
+            context['error'] = 'Ошибка доступа'
+            return context
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):

@@ -1,1 +1,18 @@
-pk = {{ time }}
+{% extends 'main/base.html' %}
+
+
+{% block body %}
+
+    <div style="text-align: center; margin: 0 10%;">
+
+        <form method="post" action="{% url 'confirm_manicure' pk %}">
+
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary btn-sm" type="submit">Подтвердить</button>
+
+        </form>
+    </div>
+
+
+{% endblock %}

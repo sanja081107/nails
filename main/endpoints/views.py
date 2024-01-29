@@ -4,10 +4,11 @@ from allauth.account.models import EmailAddress
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseNotFound, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 
+from main.forms import *
 from main.models import *
 
 
@@ -29,33 +30,27 @@ class ManicureView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ManicureView, self).get_context_data(**kwargs)
         today = datetime.date.today()
+        yesterday = today - datetime.timedelta(days=1)
+        all_posts = Manicure.objects.filter(date__gt=yesterday, client=None, is_active=True)            # поиск всех свободных дней
 
-        if not self.request.user.is_authenticated:
-            yesterday = today - datetime.timedelta(days=1)
-            posts = Manicure.objects.filter(date__gt=yesterday, client=None, is_active=True)
+        free_dates = []
+        for el in all_posts:
+            free_dates.append(str(el.date))
+        free_dates.append(str(today))
 
-            dates = []
-            for el in posts:
-                dates.append(str(el.date))
-            dates.append(str(today))
-        else:
+        if not self.request.user.is_authenticated:                                                      # Если пользователь не авторизован
+            dates = free_dates
+        else:                                                                                           # Если пользователь авторизован
             n = 1                                                                                       # сколько дней за и после неактивны со дня записи
-            yesterday = today - datetime.timedelta(days=1)
-            all_dates = Manicure.objects.filter(date__gt=yesterday, client=None, is_active=True)        # поиск всех свободных дней
-            busy_dates = Manicure.objects.filter(date__gt=yesterday, client=self.request.user)          # поиск всех предстоящих записей для пользователя
+            busy_posts = Manicure.objects.filter(date__gt=yesterday, client=self.request.user)          # поиск всех предстоящих записей для пользователя
 
-            all_dates_list = []
-            for el in all_dates:
-                all_dates_list.append(str(el.date))
-            all_dates_list.append(str(today))
-
-            busy_dates_list = []
-            if busy_dates:
-                for el in busy_dates:
+            busy_dates = []
+            if busy_posts:
+                for el in busy_posts:
                     for i in range(n+1):
-                        busy_dates_list.append(str(el.date - datetime.timedelta(days=i)))
-                        busy_dates_list.append(str(el.date + datetime.timedelta(days=i)))
-            dates = set(all_dates_list) - set(busy_dates_list)
+                        busy_dates.append(str(el.date - datetime.timedelta(days=i)))
+                        busy_dates.append(str(el.date + datetime.timedelta(days=i)))
+            dates = set(free_dates) - set(busy_dates)
             dates = list(dates)
 
         context['title'] = 'Запись на маникюр'
@@ -64,7 +59,7 @@ class ManicureView(TemplateView):
         return context
 
 
-def search_times(request):
+def times_result(request):
     if request.method == 'GET':
         date_str = request.GET.get('datepicker_value')
         date = datetime.datetime.strptime(date_str, '%Y-%m-%d')
@@ -84,8 +79,30 @@ class SelectServiceView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(SelectServiceView, self).get_context_data(**kwargs)
-        context['time'] = self.kwargs['pk']
+        context['title'] = 'Выберите услугу'
+        context['body_title'] = 'Выберите услугу'
+        context['form'] = ServiceForm(initial={'service': Manicure.objects.get(pk=self.kwargs['pk']).service})
+        context['pk'] = self.kwargs['pk']
         return context
+
+
+def confirm_manicure(request, pk):
+    post = Manicure.objects.get(pk=pk)
+
+    post.client = request.user
+    post.service = Service.objects.get(id=request.POST['service'])
+    post.is_active = False
+    post.save()
+    return redirect('user_history', slug=request.user.slug)
+
+
+def delete_manicure(request, pk):
+    post = Manicure.objects.get(pk=pk)
+    post.is_active = True
+    post.service = None
+    post.client = None
+    post.save()
+    return redirect('user_history', slug=request.user.slug)
 
 
 class AboutView(TemplateView):

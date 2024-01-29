@@ -36,8 +36,9 @@ class CustomUserAdmin(UserAdmin):
 
 
 class ManicureAdmin(admin.ModelAdmin):
-    list_display = ('title', 'client', 'date')
-    list_editable = ('client',)
+    list_display = ('title', 'client', 'date', 'is_active')
+    list_filter = ('date',)
+    list_per_page = 30
 
 
 admin.site.register(CustomUser, CustomUserAdmin)

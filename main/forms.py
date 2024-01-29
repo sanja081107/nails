@@ -39,3 +39,20 @@ class LoginUserForm(AuthenticationForm):
 
     class Meta:
         model = CustomUser
+
+
+class ServiceForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['service'].empty_label = 'Все услуги'
+        self.fields['service'].label = ''
+
+    class Meta:
+        model = Manicure
+        fields = ('service',)
+        widgets = {
+            'service': forms.Select(attrs={
+                'class': 'form-control',
+                'required': True,
+            }),
+        }

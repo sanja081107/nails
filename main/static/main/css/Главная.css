@@ -7,6 +7,10 @@
   min-height: 680px;
 }
 
+.row {
+    margin: 0;
+}
+
 .u-section-1 .u-group-1 {
   width: 187px;
   min-height: 65px;
