@@ -3,16 +3,22 @@
 
 {% block body %}
 
-    <div style="text-align: center; margin: 0 10%;">
+    {% if not error %}
+        <div style="text-align: center; margin: 0 10%;">
 
-        <form method="post" action="{% url 'confirm_manicure' pk %}">
+            <form method="post" action="{% url 'confirm_manicure' pk %}">
 
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button class="btn btn-primary btn-sm" type="submit">Подтвердить</button>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-primary btn-sm" type="submit">Подтвердить</button>
 
-        </form>
-    </div>
-
+            </form>
+        </div>
+    {% else %}
+        <div style="text-align: center;">
+            <br><br>
+            <strong>Ошибка доступа</strong>
+        </div>
+    {% endif %}
 
 {% endblock %}

@@ -24,6 +24,7 @@ class HomeView(TemplateView):
         context['title'] = 'Главная'
         return context
 
+
 class ManicureView(TemplateView):
     template_name = 'main/manicure.html'
 
@@ -79,10 +80,35 @@ class SelectServiceView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(SelectServiceView, self).get_context_data(**kwargs)
-        context['title'] = 'Выберите услугу'
-        context['body_title'] = 'Выберите услугу'
-        context['form'] = ServiceForm(initial={'service': Manicure.objects.get(pk=self.kwargs['pk']).service})
-        context['pk'] = self.kwargs['pk']
+        post = Manicure.objects.get(pk=self.kwargs['pk'])
+
+        today = datetime.date.today()
+        yesterday = today - datetime.timedelta(days=1)
+
+        all_posts = Manicure.objects.filter(date__gt=yesterday, client=None, is_active=True)        # поиск всех свободных дней
+        free_dates = []
+        for el in all_posts:
+            free_dates.append(str(el.date))
+        free_dates.append(str(today))
+
+        n = 1                                                                                       # сколько дней за и после неактивны со дня записи
+        busy_posts = Manicure.objects.filter(date__gt=yesterday, client=self.request.user)          # поиск всех предстоящих записей для пользователя
+        busy_dates = []
+        if busy_posts:
+            for el in busy_posts:
+                for i in range(n+1):
+                    busy_dates.append(str(el.date - datetime.timedelta(days=i)))
+                    busy_dates.append(str(el.date + datetime.timedelta(days=i)))
+        dates = set(free_dates) - set(busy_dates)
+        dates = list(dates)
+
+        if str(post.date) in dates:
+            context['title'] = 'Выберите услугу'
+            context['body_title'] = 'Выберите услугу'
+            context['form'] = ServiceForm(initial={'service': post.service})
+            context['pk'] = self.kwargs['pk']
+        else:
+            context['error'] = 'Ошибка'
         return context
 
 
@@ -98,10 +124,12 @@ def confirm_manicure(request, pk):
 
 def delete_manicure(request, pk):
     post = Manicure.objects.get(pk=pk)
-    post.is_active = True
-    post.service = None
-    post.client = None
-    post.save()
+    if (request.user.is_authenticated and request.user == post.client) or request.user.is_staff:
+        post.is_active = True
+        post.service = None
+        post.client = None
+        post.save()
+
     return redirect('user_history', slug=request.user.slug)
 
 
