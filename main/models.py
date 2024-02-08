@@ -69,7 +69,7 @@ class Service(models.Model):
     price = models.IntegerField(default=0, verbose_name='Цена в рублях')
 
     def save(self, *args, **kwargs):
-        self.title = str(self.title) + ' = ' + str(self.price) + 'руб.'
+        self.title = str(self.title) + ' = ' + str(self.price) + 'р.'
         return super(Service, self).save(*args, **kwargs)
 
     def __str__(self):

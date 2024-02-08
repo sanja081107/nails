@@ -56,3 +56,20 @@ class ServiceForm(ModelForm):
                 'required': True,
             }),
         }
+
+
+class ManicureForm(ModelForm):
+
+    class Meta:
+        model = Manicure
+        fields = ('time', 'date', 'is_active')
+        widgets = {
+            'time': forms.TextInput(attrs={
+                'class': 'form-control',
+            }),
+            'date': forms.TextInput(attrs={
+                'class': 'form-control',
+                'type': 'date'
+            }),
+            'is_active': forms.CheckboxInput(),
+        }

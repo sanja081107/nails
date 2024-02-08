@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseNotFound, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, UpdateView
 
 from main.forms import *
 from main.models import *
@@ -120,6 +120,18 @@ def confirm_manicure(request, pk):
     post.is_active = False
     post.save()
     return redirect('user_history', slug=request.user.slug)
+
+
+class EditManicureView(UpdateView):
+    template_name = 'main/edit_manicure.html'
+    pk_url_kwarg = 'pk'
+    model = Manicure
+    form_class = ManicureForm
+    success_url = reverse_lazy('manicure')
+
+    def get_context_data(self, **kwargs):
+        context = super(EditManicureView, self).get_context_data(**kwargs)
+        return context
 
 
 def delete_manicure(request, pk):
