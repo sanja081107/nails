@@ -36,8 +36,12 @@
 
         <h4>Выберите свободную дату</h4><br>
 
+        {% if request.user.is_staff %}
+            <button id="edit_manicure" class="btn btn-sm" onclick="editManicure()">Редактировать</button><br>
+        {% endif %}
 
-        <div id="datepicker" style="display: inline-block; margin: 0 auto;"></div>
+        <div id="calendar"><div id="datepicker" style="display: inline-block; margin: 0 auto;"></div></div>             <!-- Date calendar -->
+
 
         <input
             hidden
@@ -46,16 +50,27 @@
             hx-target="#times-result"
             id="datepicker_value"
             name="datepicker_value"
-            value=""><br><br>
+            value="">
 
-        <div id="times-result">
+        {% if request.user.is_staff %}
+            <input
+                hidden
+                hx-get="{% url 'times_admin_result' %}"
+                hx-trigger="click delay:0.3s"
+                hx-target="#times-result"
+                id="admin_datepicker_value"
+                name="admin_datepicker_value"
+                value="">
+        {% endif %}
+
+        <div id="times-result" style="margin-top: 30px;">
             {% include 'main/times_result.html' %}
         </div>
 
 
         <script>
             var dates = [{% for el in dates %}'{{ el }}',{% endfor %}];
-            console.log(dates);
+
 
             $(function(){
                 $("#datepicker").datepicker({
@@ -67,13 +82,71 @@
             });
 
 
-            document.querySelector('#datepicker').onchange = function() {
-                var date = document.querySelector("#datepicker");
-                var date_value = document.querySelector("#datepicker_value");
-                date_value.value = date.value;
-                if (date_value.value != 'none') {
-                    date_value.click();
+            {% if request.user.is_staff %}
+
+                function editManicure() {
+                    $("#calendar").empty();
+                    var str = '<div id="datepicker" style="display: inline-block; margin: 0 auto;"></div>';
+                    document.querySelector("#calendar").innerHTML += str;
+
+                    var btn = document.querySelector("#edit_manicure");
+                    btn.innerText = 'Закончить';
+                    btn.setAttribute('onclick','cancelEditManicure()');
+
+                    $(function(){
+                        $("#datepicker").datepicker({
+                            minDate: 0
+                        });
+                    });
                 };
+
+
+                function cancelEditManicure() {
+                    $("#calendar").empty();
+                    var str = '<div id="datepicker" style="display: inline-block; margin: 0 auto;"></div>';
+                    document.querySelector("#calendar").innerHTML += str;
+
+                    var btn = document.querySelector("#edit_manicure");
+                    btn.innerText = 'Редактировать';
+                    btn.setAttribute('onclick','editManicure()');
+
+                    $(function(){
+                        $("#datepicker").datepicker({
+                            beforeShowDay: function(date){
+                                var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+                                return [dates.indexOf(string) != -1]
+                            }
+                        });
+                    });
+                };
+
+            {% endif %}
+
+
+            document.querySelector('#calendar').onchange = function() {
+                var date = document.querySelector("#datepicker");
+
+                {% if request.user.is_staff %}
+                    if (document.querySelector("#edit_manicure").innerText == 'Редактировать') {
+                        var date_value = document.querySelector("#datepicker_value");
+                        date_value.value = date.value;
+                        if (date_value.value != 'none') {
+                            date_value.click();
+                        };
+                    } else {
+                        var date_value = document.querySelector("#admin_datepicker_value");
+                        date_value.value = date.value;
+                        if (date_value.value != 'none') {
+                            date_value.click();
+                        };
+                    };
+                {% else %}
+                    var date_value = document.querySelector("#datepicker_value");
+                    date_value.value = date.value;
+                    if (date_value.value != 'none') {
+                        date_value.click();
+                    };
+                {% endif %}
             };
         </script>
 

@@ -74,6 +74,18 @@ def times_result(request):
     return render(request, 'main/times_result.html', context)
 
 
+def times_admin_result(request):
+    if request.method == 'GET':
+        date_str = request.GET.get('admin_datepicker_value')
+        date = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+    if not date:
+        date = datetime.date.today()
+    context = {
+        'date': date,
+    }
+    return render(request, 'main/times_result.html', context)
+
+
 class SelectServiceView(LoginRequiredMixin, TemplateView):
     template_name = 'main/select_service.html'
     login_url = reverse_lazy('user_login')
