@@ -41,7 +41,7 @@ class CustomUser(AbstractUser):
 
 class Manicure(models.Model):
     title = models.CharField(max_length=15, verbose_name='Название', blank=True, null=True)
-    time = models.CharField(max_length=5, verbose_name='Время', validators=[RegexValidator(regex=r'(^(([0,1][0-9])|(2[0-2])):[0-9][0-9]$)', message='Неверный формат времени!')])
+    time = models.CharField(max_length=5, verbose_name='Время', validators=[RegexValidator(regex=r'(^(([0,1][0-9])|(2[0-2])):([0-5][0-9])|(00)$)', message='Неверный формат времени!')])
     client = models.ForeignKey('CustomUser', on_delete=models.SET_DEFAULT, verbose_name='Клиент', default=None, blank=True, null=True)
     service = models.ForeignKey('Service', on_delete=models.DO_NOTHING, verbose_name='Доступные услуги', default=None, blank=True, null=True)
     date = models.DateField(verbose_name='Дата', default=None)

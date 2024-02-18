@@ -62,14 +62,21 @@ class ManicureForm(ModelForm):
 
     class Meta:
         model = Manicure
-        fields = ('time', 'date', 'is_active')
+        fields = ('time', 'date', 'client', 'service', 'is_active')
         widgets = {
             'time': forms.TextInput(attrs={
                 'class': 'form-control',
+                'placeholder': '00:00',
             }),
             'date': forms.TextInput(attrs={
                 'class': 'form-control',
                 'type': 'date'
+            }),
+            'client': forms.Select(attrs={
+                'class': 'form-control',
+            }),
+            'service': forms.Select(attrs={
+                'class': 'form-control',
             }),
             'is_active': forms.CheckboxInput(),
         }
