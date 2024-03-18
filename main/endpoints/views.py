@@ -141,15 +141,45 @@ def confirm_manicure(request, pk):
     return redirect('user_history', slug=request.user.slug)
 
 
-class EditManicureView(UpdateView):
+class EditServiceView(LoginRequiredMixin, UpdateView):
+    template_name = 'main/edit_manicure.html'
+    pk_url_kwarg = 'pk'
+    model = Manicure
+    form_class = ServiceForm
+
+    login_url = reverse_lazy('user_login')
+
+    def get_success_url(self):
+        return reverse('user_history', kwargs={'slug': self.request.user.slug})
+
+    def get_context_data(self, **kwargs):
+        context = super(EditServiceView, self).get_context_data(**kwargs)
+        post = Manicure.objects.get(pk=self.kwargs['pk'])
+
+        if post.client == self.request.user and post.date >= datetime.date.today():
+            context['title'] = 'Выберите услугу'
+            context['body_title'] = 'Выберите услугу'
+        else:
+            context['error'] = 'Ошибка'
+        return context
+
+
+class EditManicureView(LoginRequiredMixin, UpdateView):
     template_name = 'main/edit_manicure.html'
     pk_url_kwarg = 'pk'
     model = Manicure
     form_class = ManicureForm
     success_url = reverse_lazy('manicure')
 
+    login_url = reverse_lazy('user_login')
+
     def get_context_data(self, **kwargs):
         context = super(EditManicureView, self).get_context_data(**kwargs)
+        if self.request.user.is_staff:
+            context['title'] = 'Изменить данные'
+            context['body_title'] = 'Изменить данные'
+        else:
+            context['error'] = 'Ошибка'
         return context
 
 

@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User, AbstractUser
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -53,7 +54,14 @@ class Manicure(models.Model):
         time_out = str(self.time)
         time_out = time_out.split(':')
         self.title = day[2] + '. ' + str(self.time) + '-' + str(int(time_out[0])+2) + ':' + time_out[1]
-        return super(Manicure, self).save(*args, **kwargs)
+
+        posts = Manicure.objects.filter(title=self.title, date=self.date)
+        print(posts)
+        if len(posts) >= 1:
+            RegexValidator(message='Уже есть такое время')
+
+        else:
+            return super(Manicure, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
