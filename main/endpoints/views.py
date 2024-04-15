@@ -61,36 +61,21 @@ class ManicureView(TemplateView):
 
 
 def times_result(request):
-    today = datetime.datetime.today()
+    today = datetime.datetime.today().date()
+    print(today)
     if request.method == 'GET':
         date_str = request.GET.get('datepicker_value')
-        date = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+        date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
         if date < today:
             date = None
             return render(request, 'main/times_result.html', context={'date': date})
-    if not date:
-        date = today
+
     times = Manicure.objects.filter(date=date, client=None, is_active=True)
     context = {
         'times': times,
         'date': date,
     }
     return render(request, 'main/times_result.html', context)
-
-
-def times_admin_result(request):
-    if request.user.is_staff:
-        if request.method == 'GET':
-            date_str = request.GET.get('admin_datepicker_value')
-            date = datetime.datetime.strptime(date_str, '%Y-%m-%d')
-        if not date:
-            date = datetime.date.today()
-
-        context = {'date': date}
-
-        return render(request, 'main/times_result.html', context)
-    else:
-        return HttpResponse("Ошибка доступа")
 
 
 class SelectServiceView(LoginRequiredMixin, TemplateView):
