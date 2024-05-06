@@ -13,6 +13,8 @@ urlpatterns = [
     path('select_service/<int:pk>/', SelectServiceView.as_view(), name='select_service'),
     path('confirm_manicure/<int:pk>/', confirm_manicure, name='confirm_manicure'),
     path('edit_service/<int:pk>/', EditServiceView.as_view(), name='edit_service'),
+    path('add_manicure/<str:date>/', AddManicureView.as_view(), name='add_manicure'),
+    path('delete_manicure/<int:pk>/', DeleteManicureView.as_view(), name='delete_manicure'),
     path('edit_manicure/<int:pk>/', EditManicureView.as_view(), name='edit_manicure'),
     path('delete_manicure/<int:pk>/', delete_manicure, name='delete_manicure'),
 

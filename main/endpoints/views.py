@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseNotFound, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, UpdateView
+from django.views.generic import TemplateView, UpdateView, CreateView, DeleteView
 
 from main.forms import *
 from main.models import *
@@ -57,6 +57,30 @@ class ManicureView(TemplateView):
         context['title'] = 'Запись на маникюр'
         context['body_title'] = 'Запись на маникюр'
         context['dates'] = dates
+        return context
+
+
+class AddManicureView(CreateView):
+    form_class = ManicureForm
+    template_name = 'main/edit_manicure.html'
+    success_url = reverse_lazy('manicure')
+
+    def get_context_data(self, **kwargs):
+        context = super(AddManicureView, self).get_context_data(**kwargs)
+        context['form'] = ManicureForm(initial={'date': self.kwargs['date']})
+        return context
+
+
+class DeleteManicureView(DeleteView):
+    model = Manicure
+    pk_url_kwarg = 'pk'
+    success_url = reverse_lazy('manicure')
+    template_name = 'main/manicure_confirm_delete.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DeleteManicureView, self).get_context_data(**kwargs)
+        context['title'] = 'Удаление записи'
+        context['body_title'] = 'Подтвердите удаление'
         return context
 
 

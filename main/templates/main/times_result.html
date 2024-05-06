@@ -12,6 +12,7 @@
                             {% if request.user.is_staff %}
                                 <li style="margin: 10px 0;"><strong><a href="{% url 'edit_manicure' el.pk %}">{{ el.title }}</a></strong>&nbsp;&nbsp;
                                     <a class="btn btn-primary btn-sm" href="{% url 'select_service' el.pk %}">выбор</a>
+                                    <a class="btn btn-danger btn-sm" href="{% url 'delete_manicure' el.pk %}">удалить</a>
                                 </li>
                             {% else %}
                                 <li style="margin: 10px 0;"><strong>{{ el.title }}</strong>&nbsp;&nbsp;
@@ -19,6 +20,10 @@
                                 </li>
                             {% endif %}
                         {% endfor %}
+
+                        {% if request.user.is_staff %}
+                            <a href="{% url 'add_manicure' date %}" class="btn btn-primary btn-sm">добавить запись</a>
+                        {% endif %}
                     </ol>
                 </div>
 
