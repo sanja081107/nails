@@ -43,18 +43,35 @@
         <div id="calendar"><div id="datepicker" style="display: inline-block; margin: 0 auto;"></div></div>             <!-- Date calendar -->
 
 
-        <input
-            hidden
-            hx-get="{% url 'times_result' %}"
-            hx-trigger="click delay:0.3s"
-            hx-target="#times-result"
-            id="datepicker_value"
-            name="datepicker_value"
-            value="">
+        <div class="all-user">
+            <input
+                hidden
+                hx-get="{% url 'times_result' %}"
+                hx-trigger="click delay:0.3s"
+                hx-target="#times-result"
+                id="datepicker_value"
+                name="datepicker_value"
+                value="">
+
+            <div id="times-result" style="margin: 30px 0;">
+                {% include 'main/times_result.html' %}
+            </div>
+        </div>
 
 
-        <div id="times-result" style="margin: 30px 0;">
-            {% include 'main/times_result.html' %}
+        <div class="admin-user" hidden>
+            <input
+                hidden
+                hx-get="{% url 'times_result_admin' %}"
+                hx-trigger="click delay:0.3s"
+                hx-target="#times-result-admin"
+                id="datepicker_value_admin"
+                name="datepicker_value_admin"
+                value="">
+
+            <div id="times-result-admin" style="margin: 30px 0;">
+                {% include 'main/times_result_admin.html' %}
+            </div>
         </div>
 
 
@@ -78,6 +95,8 @@
                     $("#calendar").empty();
                     var str = '<div id="datepicker" style="display: inline-block; margin: 0 auto;"></div>';
                     document.querySelector("#calendar").innerHTML += str;
+                    document.querySelector(".admin-user").hidden = false;
+                    document.querySelector(".all-user").hidden = true;
 
                     var btn_edit = document.querySelector("#edit_manicure");
                     btn_edit.innerText = 'Закончить';
@@ -95,6 +114,8 @@
                     $("#calendar").empty();
                     var str = '<div id="datepicker" style="display: inline-block; margin: 0 auto;"></div>';
                     document.querySelector("#calendar").innerHTML += str;
+                    document.querySelector(".all-user").hidden = false;
+                    document.querySelector(".admin-user").hidden = true;
 
                     var btn = document.querySelector("#edit_manicure");
                     btn.innerText = 'Редактировать';
@@ -116,9 +137,12 @@
             document.querySelector('#calendar').onchange = function() {
                 var date = document.querySelector("#datepicker");
                 var date_value = document.querySelector("#datepicker_value");
+                var date_value_admin = document.querySelector("#datepicker_value_admin");
                 date_value.value = date.value;
-                if (date_value.value != 'none') {
+                date_value_admin.value = date.value;
+                if (date_value.value != 'none' || date_value_admin.value != 'none') {
                     date_value.click();
+                    date_value_admin.click();
                 };
             };
         </script>

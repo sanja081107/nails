@@ -74,6 +74,7 @@ class AddManicureView(CreateView):
 class DeleteManicureView(DeleteView):
     model = Manicure
     pk_url_kwarg = 'pk'
+    context_object_name = 'el'
     success_url = reverse_lazy('manicure')
     template_name = 'main/manicure_confirm_delete.html'
 
@@ -86,7 +87,6 @@ class DeleteManicureView(DeleteView):
 
 def times_result(request):
     today = datetime.datetime.today().date()
-    print(today)
     if request.method == 'GET':
         date_str = request.GET.get('datepicker_value')
         date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
@@ -100,6 +100,23 @@ def times_result(request):
         'date': date,
     }
     return render(request, 'main/times_result.html', context)
+
+
+def times_result_admin(request):
+    today = datetime.datetime.today().date()
+    if request.method == 'GET':
+        date_str = request.GET.get('datepicker_value_admin')
+        date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
+        if date < today:
+            date = None
+            return render(request, 'main/times_result.html', context={'date': date})
+
+    times = Manicure.objects.filter(date=date, client=None, is_active=True)
+    context = {
+        'times': times,
+        'date': date,
+    }
+    return render(request, 'main/times_result_admin.html', context)
 
 
 class SelectServiceView(LoginRequiredMixin, TemplateView):

@@ -9,6 +9,8 @@
         <div class="col-sm">
 
             <form method="post">
+                {% csrf_token %}
+                <p>вы уверены что хотите удалить запись на {{ el.title }}?</p>
                 <button class="btn btn-primary btn-sm" type="submit">Подтвердить</button>
                 <a class="btn btn-danger btn-sm" href="{% url 'manicure' %}">Отменить</a>
             </form>

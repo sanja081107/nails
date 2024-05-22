@@ -9,11 +9,13 @@
                 <div class="alert alert-secondary" style="margin-bottom: 50px;" role="alert">
                     <ol>
                         {% for el in times %}
-                            <li style="margin: 10px 0;"><strong>{{ el.title }}</strong>&nbsp;&nbsp;
+                            <li style="margin: 10px 0;"><strong><a href="{% url 'edit_manicure' el.pk %}">{{ el.title }}</a></strong>&nbsp;&nbsp;
                                 <a class="btn btn-primary btn-sm" href="{% url 'select_service' el.pk %}">выбор</a>
+                                <a class="btn btn-danger btn-sm" href="{% url 'delete_manicure' el.pk %}">удалить</a>
                             </li>
                         {% endfor %}
                     </ol>
+                    <a href="{% url 'add_manicure' date %}" class="btn btn-primary btn-sm">добавить запись</a>
                 </div>
 
             </div>
@@ -28,6 +30,7 @@
 
                 <div class="alert alert-secondary" role="alert">
                     <p style="margin: 10px 0;"><strong>На {{ date|date:"d.m.y" }} нет записей</strong></p>
+                    <a href="{% url 'add_manicure' date %}" class="btn btn-primary btn-sm">добавить запись</a>
                 </div>
 
             </div>
