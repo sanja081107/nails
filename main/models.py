@@ -41,27 +41,21 @@ class CustomUser(AbstractUser):
 
 
 class Manicure(models.Model):
-    title = models.CharField(max_length=15, verbose_name='Название', blank=True, null=True, validators=[RegexValidator(regex=r'^([1-31].)', message='такое время существует')])
+    title = models.CharField(max_length=20, verbose_name='Название', blank=True, null=True, validators=[RegexValidator(regex=r'^([1-31].)', message='такое время существует')], unique=True)
     time = models.CharField(max_length=5, verbose_name='Время', validators=[RegexValidator(regex=r'^(([0,1][0-9])|(2[0-2])):(([0-5][0-9])|(00))$', message='Неверный формат времени!')])
     client = models.ForeignKey('CustomUser', on_delete=models.SET_DEFAULT, verbose_name='Клиент', default=None, blank=True, null=True)
     service = models.ForeignKey('Service', on_delete=models.DO_NOTHING, verbose_name='Доступные услуги', default=None, blank=True, null=True)
     date = models.DateField(verbose_name='Дата', default=None)
     is_active = models.BooleanField(verbose_name='Опубликовать', default=True)
 
-    def save(self, *args, **kwargs):
-        day = str(self.date)
-        day = day.split('-')
-        time_out = str(self.time)
-        time_out = time_out.split(':')
-        self.title = day[2] + '. ' + str(self.time) + '-' + str(int(time_out[0])+2) + ':' + time_out[1]
-
-        posts = Manicure.objects.filter(title=self.title, date=self.date)
-
-        if len(posts) >= 1:
-            self.title = 'такое время существует'
-            return RegexValidator(message='такое время существует')
-        else:
-            return super(Manicure, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     day = str(self.date)
+    #     day = day.split('-')
+    #     time_out = str(self.time)
+    #     time_out = time_out.split(':')
+    #     self.title = day[2] + '.' + day[1] + '.' + day[0][2:] + ' ' + str(self.time) + '-' + str(int(time_out[0])+2) + ':' + time_out[1]        # 21.08.24 19:00-21:00
+    #
+    #     return super(Manicure, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title

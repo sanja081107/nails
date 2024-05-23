@@ -60,10 +60,17 @@ class ServiceForm(ModelForm):
 
 class ManicureForm(ModelForm):
 
+    # def __init__(self, *args, **kwargs):
+    #     super(ManicureForm, self).__init__(*args, **kwargs)
+    #     self.fields['title'].error_messages = {
+    #         'unique': "Выбранное имя уже используется",
+    #     }
+
     class Meta:
         model = Manicure
-        fields = ('time', 'date', 'client', 'service', 'is_active')
+        fields = ('title', 'time', 'date', 'client', 'service', 'is_active')
         widgets = {
+            # 'title': forms.HiddenInput(),
             'time': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': '00:00',

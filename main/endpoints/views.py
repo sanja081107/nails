@@ -65,6 +65,17 @@ class AddManicureView(CreateView):
     template_name = 'main/edit_manicure.html'
     success_url = reverse_lazy('manicure')
 
+    def form_valid(self, form):
+        day = str(form.cleaned_data.get('date'))
+        day = day.split('-')
+        time_out = str(form.cleaned_data.get('time'))
+        time_out = time_out.split(':')
+        form.instance.title = day[2] + '.' + day[1] + '.' + day[0][2:] + ' ' + str(form.cleaned_data.get('time')) + '-' + str(int(time_out[0])+2) + ':' + time_out[1]
+        try:
+            return super().form_valid(form)
+        except:
+            return super().form_invalid(form)
+
     def get_context_data(self, **kwargs):
         context = super(AddManicureView, self).get_context_data(**kwargs)
         context['form'] = ManicureForm(initial={'date': self.kwargs['date']})
@@ -161,7 +172,7 @@ def confirm_manicure(request, pk):
     post = Manicure.objects.get(pk=pk)
 
     post.client = request.user
-    post.service = Service.objects.get(id=request.POST['service'])
+    post.service = Service.objects.get(pk=request.POST['service'])
     post.is_active = False
     post.save()
     return redirect('user_history', slug=request.user.slug)
@@ -209,7 +220,7 @@ class EditManicureView(LoginRequiredMixin, UpdateView):
         return context
 
 
-def delete_manicure(request, pk):
+def cancel_manicure(request, pk):
     post = Manicure.objects.get(pk=pk)
     if (request.user.is_authenticated and request.user == post.client) or request.user.is_staff:
         post.is_active = True

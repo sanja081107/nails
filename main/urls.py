@@ -17,7 +17,7 @@ urlpatterns = [
     path('add_manicure/<str:date>/', AddManicureView.as_view(), name='add_manicure'),
     path('delete_manicure/<int:pk>/', DeleteManicureView.as_view(), name='delete_manicure'),
     path('edit_manicure/<int:pk>/', EditManicureView.as_view(), name='edit_manicure'),
-    path('delete_manicure/<int:pk>/', delete_manicure, name='delete_manicure'),
+    path('cancel_manicure/<int:pk>/', cancel_manicure, name='cancel_manicure'),
 
     path('password_change/', PasswordChange.as_view(), name='password_change'),
     path('password_change_done/', PasswordChangeDone.as_view(), name='password_change_done'),
